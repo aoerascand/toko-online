@@ -5,7 +5,7 @@ export const products = [
         stock: 10,
         price: 5000,
         description: "This is the description for Product 1.",
-        image: "https://via.placeholder.com/150"
+        image: "public/images/aqua.png"
     },
     {
         id: 2,
@@ -14,8 +14,8 @@ export const products = [
         price: 10000,
         description: "This is the description for Product 2.",
         image: "https://via.placeholder.com/150"
-    }
-    ,{
+    },
+    {
         id: 3,
         name: "Product 3",
         stock: 15,

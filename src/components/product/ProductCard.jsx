@@ -24,11 +24,14 @@ export default function ProductCard({ product }) {
         </span>
       )}
 
-      <img
-        src={product.image}
-        alt={product.name}
-        className="w-full h-36 object-cover rounded-xl"
-      />
+      <div className="w-full aspect-square overflow-hidden rounded-xl bg-gray-100">
+        <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover"
+        />
+        </div>
+
 
       <h3 className="font-semibold mt-3 text-gray-800 text-lg">
         {product.name}
