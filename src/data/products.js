@@ -5,7 +5,7 @@ export const products = [
         stock: 10,
         price: 5000,
         description: "This is the description for Product 1.",
-        image: "public/images/aqua.png"
+        image: "images/aqua.png"
     },
     {
         id: 2,
