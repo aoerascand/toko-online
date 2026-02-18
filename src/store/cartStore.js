@@ -1,71 +1,68 @@
-import {create} from 'zustand';
-import {persist} from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 const useCartStore = create(
-    persist(
-        (set)=> ({
-            cart:[],
-               addToCart: (product) =>
-                    set((state) => {
-                        const existing = state.cart.find(
-                        (item) => item.id === product.id
-                        );
+  persist(
+    (set, get) => ({
+      cart: [],
 
-                        // Kalau stok habis
-                        if (product.stock === 0) return state;
+      addToCart: (product) => {
+        const existing = get().cart.find(
+          (item) => item.id === product.id
+        );
 
-                        if (existing) {
-                        // Jangan melebihi stok
-                        if (existing.quantity >= product.stock) {
-                            return state;
-                        }
+        if (existing) {
+          if (existing.quantity >= product.stock) return;
 
-                        return {
-                            cart: state.cart.map((item) =>
-                            item.id === product.id
-                                ? {
-                                    ...item,
-                                    quantity: item.quantity + 1,
-                                }
-                                : item
-                            ),
-                        };
-                        }
+          set({
+            cart: get().cart.map((item) =>
+              item.id === product.id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            ),
+          });
+        } else {
+          set({
+            cart: [...get().cart, { ...product, quantity: 1 }],
+          });
+        }
+      },
 
-                        return {
-                        cart: [
-                            ...state.cart,
-                            {
-                            ...product,
-                            quantity: 1,
-                            },
-                        ],
-                        };
-                    }),
+      increaseQuantity: (id) => {
+        set({
+          cart: get().cart.map((item) => {
+            if (item.id === id) {
+              if (item.quantity >= item.stock) return item;
+              return { ...item, quantity: item.quantity + 1 };
+            }
+            return item;
+          }),
+        });
+      },
 
-                
-                removeFromCart: (id) =>
-                    set((state)=> ({
-                        cart: state.cart.filter((item) => item.id !== id),
-                    })),
-                    clearCart: () => set({ cart: [] }),
-                IncreaseQuantity: (id) =>
-                    set((state)=>
-                    ({
-                        cart: state.cart.map((item) =>
-                        item.id === id
-                    ? {...item, quantity: item.quantity + 1} : item),
-                    })),
-                DecreaseQuantity: (id) =>
-                    set((state)=>
-                    ({
-                        cart:state.cart.map((item)=> 
-                        item.id === id && item.quantity > 1
-                    ? {...item, quantity: item.quantity - 1} : item),
-                    })),
+      decreaseQuantity: (id) => {
+        set({
+          cart: get().cart
+            .map((item) =>
+              item.id === id
+                ? { ...item, quantity: item.quantity - 1 }
+                : item
+            )
+            .filter((item) => item.quantity > 0),
+        });
+      },
+
+      removeFromCart: (id) =>
+        set({
+          cart: get().cart.filter((item) => item.id !== id),
         }),
-        {
-            name: 'cart-storage',}
-    )
+
+      clearCart: () => set({ cart: [] }),
+    }),
+    {
+      name: "cart-storage",
+    }
+  )
 );
+
 export default useCartStore;

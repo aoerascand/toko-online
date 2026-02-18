@@ -124,8 +124,11 @@ export default function Cart() {
                   </div>
 
                   <button
-                    onClick={() =>
-                      removeFromCart(item.id)
+                    onClick={() => {
+                      if(confirm("yakkin mau hapus item ini?")){
+                        removeFromCart(item.id);
+                      }
+                    }
                     }
                     className="text-red-500 hover:text-red-700 text-sm font-medium"
                   >
